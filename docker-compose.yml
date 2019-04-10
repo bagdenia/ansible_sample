@@ -1,0 +1,21 @@
+version: '3'
+services:
+  postgres:
+    environment:
+      - POSTGRES_PASSWORD=root
+    image: postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    ports:
+      - 5431:5432
+
+  redis:
+    image: redis
+    ports:
+      - 6378:6379
+    volumes:
+      - redis:/data
+
+volumes:
+  postgres:
+  redis:

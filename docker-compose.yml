@@ -1,8 +1,9 @@
-version: '3'
+version: '2'
 services:
   postgres:
     environment:
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=sample_rails_app_development
     image: postgres
     volumes:
       - postgres:/var/lib/postgresql/data
@@ -15,6 +16,16 @@ services:
       - 6378:6379
     volumes:
       - redis:/data
+
+  app:
+    image: sample_rails_app
+    environment:
+      - DB_HOST=postgres
+    ports:
+      - "80:3000"
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   postgres:

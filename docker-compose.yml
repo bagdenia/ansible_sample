@@ -18,7 +18,7 @@ services:
       - redis:/data
 
   app:
-    image: sample_rails_app
+    image: mexx/sample_rails_app:v.2.0.0
     environment:
       - DB_HOST=postgres
     ports:

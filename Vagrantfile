@@ -2,6 +2,10 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
+  SUBNET = '192.168.33'
+  EMPTY_UBUNTU_BOX = 'generic/ubuntu1804'
+
+  config.vm.network "public_network"
 
   config.vm.define 'dockerized' do |machine|
     machine.vm.box = "williamyeh/ubuntu-trusty64-docker"
@@ -23,5 +27,35 @@ Vagrant.configure("2") do |config|
 SCRIPT
 
     machine.vm.provision :shell, inline: script
+  end
+
+  config.vm.define 'app' do |machine|
+    machine.vm.box = EMPTY_UBUNTU_BOX
+    
+    machine.vm.hostname = 'app'
+    machine.vm.network :private_network, ip: "#{SUBNET}.13"
+    machine.vm.network "forwarded_port", guest: 22, host: 2223
+
+    machine.vm.provision :shell, inline: provision_script
+  end
+
+  config.vm.define 'db' do |machine|
+    machine.vm.box = EMPTY_UBUNTU_BOX
+    
+    machine.vm.hostname = 'db'
+    machine.vm.network :private_network, ip: "#{SUBNET}.14"
+    machine.vm.network "forwarded_port", guest: 22, host: 2224
+
+    machine.vm.provision :shell, inline: provision_script
+  end
+
+  def provision_script
+    public_key = File.read("#{ENV['HOME']}/.ssh/id_rsa.pub")
+    script = <<SCRIPT
+      apt-get clean
+      apt-get update
+      sudo apt-get install -y python
+      echo "#{public_key}" >> /home/vagrant/.ssh/authorized_keys
+SCRIPT
   end
 end

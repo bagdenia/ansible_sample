@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'empty_ubuntu' do |machine|
     machine.vm.box = 'generic/ubuntu1804'
-    machine.vm.network "forwarded_port", guest: 22, host: 2222
+    machine.vm.network "forwarded_port", guest: 22, host: 2222, auto_correct: true
 
     public_key = File.read("#{ENV['HOME']}/.ssh/id_rsa.pub")
     script = <<SCRIPT

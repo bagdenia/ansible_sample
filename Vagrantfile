@@ -5,7 +5,7 @@ Vagrant.configure("2") do |config|
   SUBNET = '192.168.33'
   EMPTY_UBUNTU_BOX = 'generic/ubuntu1804'
 
-  config.vm.network "public_network"
+  # config.vm.network "public_network"
 
   config.vm.define 'dockerized' do |machine|
     machine.vm.box = "williamyeh/ubuntu-trusty64-docker"
@@ -18,10 +18,11 @@ Vagrant.configure("2") do |config|
 
   config.vm.define 'empty_ubuntu' do |machine|
     machine.vm.box = 'generic/ubuntu1804'
-    machine.vm.network "forwarded_port", guest: 22, host: 2222
+    machine.vm.network "forwarded_port", guest: 22, host: 2222, auto_correct: true
 
     public_key = File.read("#{ENV['HOME']}/.ssh/id_rsa.pub")
     script = <<SCRIPT
+      echo 'nameserver 8.8.8.8' >> /etc/resolv.conf
       apt install -y python
       echo "#{public_key}" >> /home/vagrant/.ssh/authorized_keys
 SCRIPT
@@ -52,6 +53,7 @@ SCRIPT
   def provision_script
     public_key = File.read("#{ENV['HOME']}/.ssh/id_rsa.pub")
     script = <<SCRIPT
+      echo "nameserver 8.8.8.8" >> /etc/resolv.conf
       apt-get clean
       apt-get update
       sudo apt-get install -y python

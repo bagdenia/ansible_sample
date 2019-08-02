@@ -1,0 +1,5 @@
+---
+- hosts: app
+
+  tasks:
+    - debug: var=hostvars['app']['ansible_eth1']['ipv4']

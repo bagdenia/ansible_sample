@@ -27,4 +27,4 @@
 /config/master.key
 *.retry
 
-/.vagrant
+/.vagrant/*

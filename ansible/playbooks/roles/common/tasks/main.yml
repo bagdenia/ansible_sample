@@ -6,7 +6,17 @@
       - ncdu
       - htop
       - vim
+      - python-setuptools
+      - python-pip
     become: true
+
+  - name: install pip docker
+    pip: 
+      name: docker
+
+  - name: install pip docker-compose
+    pip: 
+      name: docker-compose
 
   - name: create project dir
     file:

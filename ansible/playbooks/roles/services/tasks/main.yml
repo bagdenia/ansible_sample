@@ -1,0 +1,11 @@
+---
+  - include: stop.yml
+
+  - name: clone application
+    git:
+      repo: https://github.com/Mehonoshin/sample_rails_app.git
+      dest: /sample_rails_app
+      update: yes
+      force: yes
+
+  - include: start.yml

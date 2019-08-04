@@ -1,0 +1,16 @@
+---
+  - name: check is docker-compose.yml exists
+    stat:
+      path: /{{ project_name }}/docker-compose.yml
+    register: compose_file
+
+  - name: stop old services
+    docker_service:
+      project_name: "{{ project_name }}"
+      project_src: /{{ project_name }}
+      remove_volumes: yes
+      state: absent
+      files:
+        - docker-compose.yml
+    when: compose_file.stat.exists == True
+    become: true
